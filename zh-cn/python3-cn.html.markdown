@@ -4,8 +4,11 @@ contributors:
     - ["Louie Dinh", "http://pythonpracticeprojects.com"]
     - ["Steven Basart", "http://github.com/xksteven"]
     - ["Andre Polykanine", "https://github.com/Oire"]
+    - ["Zachary Ferguson", "http://github.com/zfergus2"]
+    - ["evuez", "http://github.com/evuez"]
 translators:
     - ["Geoff Liu", "http://geoffliu.me"]
+    - ["Shalk", "https://github.com/shalk"]
 filename: learnpython3-cn.py
 lang: zh-cn
 ---
@@ -16,14 +19,14 @@ Python是由吉多·范罗苏姆(Guido Van Rossum)在90年代早期设计。它�
 欢迎大家斧正。英文版原作Louie Dinh [@louiedinh](http://twitter.com/louiedinh)
 或着Email louiedinh [at] [谷歌的信箱服务]。中文翻译Geoff Liu。
 
-注意：这篇教程是特别为Python3写的。如果你想学旧版Python2，我们特别有另一篇教程。
+注意：这篇教程是特别为Python3写的。如果你想学旧版Python2，有另一篇[教程](http://learnxinyminutes.com/docs/python/).
 
 ```python
 
 # 用井字符开头的是单行注释
 
 """ 多行字符串用三个引号
-    包裹，也常被用来做多
+    包裹，也常被用作多
     行注释
 """
 
@@ -52,7 +55,7 @@ Python是由吉多·范罗苏姆(Guido Van Rossum)在90年代早期设计。它�
 # 浮点数的运算结果也是浮点数
 3 * 2.0 # => 6.0
 
-# 模除
+# 求模
 7 % 3 # => 1
 
 # x的y次方
@@ -61,34 +64,35 @@ Python是由吉多·范罗苏姆(Guido Van Rossum)在90年代早期设计。它�
 # 用括号决定优先级
 (1 + 3) * 2  # => 8
 
-# 布尔值
+# 布尔值 (注: 第一个字母大写，其他小写)
 True
 False
 
 # 用not取非
-not True  # => False
+not True   # => False
 not False  # => True
 
-# 逻辑运算符，注意and和or都是小写
-True and False #=> False
-False or True #=> True
+# 逻辑运算符
+# 注意 and 和 or 都是小写
+True and False  # => False
+False or True   # => True
 
-# 整数也可以当作布尔值
-0 and 2 #=> 0
--5 or 0 #=> -5
-0 == False #=> True
-2 == True #=> False
-1 == True #=> True
+# 对整数使用逻辑运算
+0 and 2     # => 0
+-5 or 0     # => -5
+0 == False  # => True
+2 == True   # => False
+1 == True   # => True
 
-# 用==判断相等
+# == 判断相等
 1 == 1  # => True
 2 == 1  # => False
 
-# 用!=判断不等
+# != 判断不等
 1 != 1  # => False
 2 != 1  # => True
 
-# 比较大小
+# 更多比较符号
 1 < 10  # => True
 1 > 10  # => False
 2 <= 2  # => True
@@ -582,8 +586,8 @@ for i in double_numbers(range_):
 
 
 # 装饰器(decorators)
-# 这个例子中，beg装饰say
-# beg会先调用say。如果返回的say_please为真，beg会改变返回的字符串。
+# 这个例子中，beg装饰say. 如果say_please为真，beg
+# 会改变返回的消息。
 from functools import wraps
 
 
@@ -604,7 +608,7 @@ def say(say_please=False):
     return msg, say_please
 
 
-print(say())  # Can you buy me a beer?
+print(say())                 # Can you buy me a beer?
 print(say(say_please=True))  # Can you buy me a beer? Please! I am poor :(
 ```
 
@@ -612,18 +616,22 @@ print(say(say_please=True))  # Can you buy me a beer? Please! I am poor :(
 
 ### 线上免费材料（英文）
 
+* [Automate the Boring Stuff with Python](https://automatetheboringstuff.com)
 * [Learn Python The Hard Way](http://learnpythonthehardway.org/book/)
 * [Dive Into Python](http://www.diveintopython.net/)
 * [Ideas for Python Projects](http://pythonpracticeprojects.com)
-
 * [The Official Docs](http://docs.python.org/3/)
 * [Hitchhiker's Guide to Python](http://docs.python-guide.org/en/latest/)
-* [Python Module of the Week](http://pymotw.com/3/)
 * [A Crash Course in Python for Scientists](http://nbviewer.ipython.org/5920182)
+* [Python Course](http://www.python-course.eu/index.php)
+* [First Steps With Python](https://realpython.com/learn/python-first-steps/)
+* [A curated list of awesome Python frameworks, libraries and software](https://github.com/vinta/awesome-python)
+* [30 Python Language Features and Tricks You May Not Know About](http://sahandsaba.com/thirty-python-language-features-and-tricks-you-may-not-know.html)
+* [Official Style Guide for Python](https://www.python.org/dev/peps/pep-0008/)
+* [Python 3 Computer Science Circles](http://cscircles.cemc.uwaterloo.ca/)
 
 ### 书籍（也是英文）
 
 * [Programming Python](http://www.amazon.com/gp/product/0596158106/ref=as_li_qf_sp_asin_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0596158106&linkCode=as2&tag=homebits04-20)
 * [Dive Into Python](http://www.amazon.com/gp/product/1441413022/ref=as_li_tf_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1441413022&linkCode=as2&tag=homebits04-20)
 * [Python Essential Reference](http://www.amazon.com/gp/product/0672329786/ref=as_li_tf_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0672329786&linkCode=as2&tag=homebits04-20)
-
