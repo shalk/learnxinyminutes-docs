@@ -40,16 +40,16 @@ Python是由吉多·范罗苏姆(Guido Van Rossum)在90年代早期设计。它�
 # 算术没有什么出乎意料的
 1 + 1  # => 2
 8 - 1  # => 7
-10 * 2  # => 20
+10 * 2 # => 20
 
 # 但是除法例外，会自动转换成浮点数
 35 / 5  # => 7.0
-5 / 3  # => 1.6666666666666667
+5 / 3   # => 1.6666666666666667
 
 # 整数除法的结果都是向下取整
-5 // 3     # => 1
-5.0 // 3.0 # => 1.0 # 浮点数也可以
--5 // 3  # => -2
+5 // 3      # => 1
+5.0 // 3.0  # => 1.0 # 浮点数也可以
+-5 // 3     # => -2
 -5.0 // 3.0 # => -2.0
 
 # 浮点数的运算结果也是浮点数
@@ -560,6 +560,94 @@ math.sqrt(16) == m.sqrt(16)   # => True
 # 你可以这样列出一个模块里所有的值
 import math
 dir(math)
+####################################################
+## 6.1 多重继承
+####################################################
+
+# 另一个类定义
+class Bat:
+
+    species = 'Baty'
+
+    def __init__(self, can_fly=True):
+        self.fly = can_fly
+
+    # 这个类包含say方法
+    def say(self, msg):
+        msg = '... ... ...'
+        return msg
+
+    # 也包含自己定义的方法
+    def sonar(self):
+        return '))) ... ((('
+
+if __name__ == '__main__':
+    b = Bat()
+    print(b.say('hello'))
+    print(b.fly)
+
+
+# from "文件名不含后缀" import "函数名或类名"
+from human import Human
+from bat import Bat
+
+# Batman 继承 Human 和 Bat
+class Batman(Human, Bat):
+
+    # Batman 的species 类属性，有自己的值
+    species = 'Superhero'
+
+    def __init__(self, *args, **kwargs):
+        # 一般的，你必须调用 super来继承属性
+        #super(Batman, self).__init__(*args, **kwargs)      
+        # 尽管如此你现在处理的是多重继承, and super()
+        # 只对MRO（Method Resolution Order）列表中的下一个基类有效 
+		# 所以 我们对所有祖先明确调用__init__。 
+		# 使用 *args和 **kwargs 是一种干净的方式传递参数
+		# 对于每个父节点，就像剥洋葱一样。
+        Human.__init__(self, 'anonymous', *args, **kwargs)
+        Bat.__init__(self, *args, can_fly=False, **kwargs)
+        # 重载name属性的值
+        self.name = 'Sad Affleck'
+
+    def sing(self):
+        return 'nan nan nan nan nan batman!'
+
+
+if __name__ == '__main__':
+    sup = Batman()
+
+    # 实例类型检查
+    if isinstance(sup, Human):
+        print('I am human')
+    if isinstance(sup, Bat):
+        print('I am bat')
+    if type(sup) is Batman:
+        print('I am Batman')
+
+    # Get the Method Resolution search Order used by both getattr() and super().
+    # This attribute is dynamic and can be updated
+    print(Batman.__mro__)       # => (<class '__main__.Batman'>, <class 'human.Human'>, <class 'bat.Bat'>, <class 'object'>)
+
+    # Calls parent method but uses its own class attribute
+    print(sup.get_species())    # => Superhero
+
+    # Calls overloaded method
+    print(sup.sing())           # => nan nan nan nan nan batman!
+
+    # Calls method from Human, because inheritance order matters
+    sup.say('I agree')          # => Sad Affleck: I agree
+
+    # Call method that exists only in 2nd ancestor
+    print(sup.sonar())          # => ))) ... (((
+
+    # Inherited class attribute
+    sup.age = 100
+    print(sup.age)
+
+    # Inherited attribute from 2nd ancestor whose default value was overridden.
+    print('Can I fly? ' + str(sup.fly))
+
 
 
 ####################################################
@@ -571,18 +659,26 @@ def double_numbers(iterable):
     for i in iterable:
         yield i + i
 
-# 生成器只有在需要时才计算下一个值。它们每一次循环只生成一个值，而不是把所有的
-# 值全部算好。这意味着double_numbers不会生成大于15的数字。
-#
-# range的返回值也是一个生成器，不然一个1到900000000的列表会花很多时间和内存。
-#
-# 如果你想用一个Python的关键字当作变量名，可以加一个下划线来区分。
-range_ = range(1, 900000000)
-# 当找到一个 >=30 的结果就会停
-for i in double_numbers(range_):
+# 生成器是高效利用内存的，因为生成器只有当迭代器中的下一个值需要处理的时候，
+# 才加载数据到内存。
+# 这样使得可以对相当大的一个范围进行运算。
+# 注: 在python3 中，range 替代 xrange  
+
+for i in double_numbers(range(1, 900000000)): # range 是一个生成器
     print(i)
     if i >= 30:
         break
+
+# 你可以创建一个列表解析(list comprehension),你也可以创建
+# 一个生成器解析( generator comprehensions)
+values = (-x for x in [1,2,3,4,5])
+for x in values:
+    print(x)  # prints -1 -2 -3 -4 -5 to console/terminal
+
+# 你也可以将生成器解析转换成列表
+values = (-x for x in [1,2,3,4,5])
+gen_to_list = list(values)
+print(gen_to_list)  # => [-1, -2, -3, -4, -5]
 
 
 # 装饰器(decorators)
