@@ -162,7 +162,15 @@ bool({})  # => False
 ####################################################
 
 # print是内置的打印函数
-print("I'm Python. Nice to meet you!")
+print("I'm Python. Nice to meet you!")  # => I'm Python. Nice to meet you!
+
+# 默认情况，print函数在打印结束的时候换行。
+# 使用可选参数 end 可以改变结束字符。
+print("Hello, World", end="!")  # => Hello, World!
+
+# 从终端获得输入数据
+input_string_var = input("Enter some data: ") # Returns the data as a string
+# 注：在Python的早期版本， input() 方法原来叫做 raw_input()
 
 # 在给变量赋值前不用提前声明
 # 传统的变量命名是小写，用下划线分隔单词
@@ -172,6 +180,10 @@ some_var  # => 5
 # 访问未赋值的变量会抛出异常
 # 参考流程控制一段来学习异常处理
 some_unknown_var  # 抛出NameError
+
+# if 可以用做表达式
+# 等价于C语言中的 ?: 三元操作符
+"yahoo!" if 3 > 2 else 2  # => "yahoo!"
 
 # 用列表(list)储存序列
 li = []
@@ -196,34 +208,49 @@ li[-1]  # => 3
 # 越界存取会造成IndexError
 li[4]  # 抛出IndexError
 
-# 列表有切割语法
+# 列表有切片语法
+# （类似于数学中的开闭区间。）
 li[1:3]  # => [2, 4]
-# 取尾
+# 省略开头
 li[2:]  # => [4, 3]
-# 取头
+# 省略结尾
 li[:3]  # => [1, 2, 4]
-# 隔一个取一个
+# 间隔一个选一个
 li[::2]   # =>[1, 4]
-# 倒排列表
+# 返回一个倒排列表
 li[::-1]   # => [3, 4, 2, 1]
-# 可以用三个参数的任何组合来构建切割
-# li[始:终:步伐]
+# 可以下面三个参数的任何组合来构建高级切片
+# li[start:end:step]
+
+# 通过切片完成一层深拷贝
+li2 = li[:]  # => li2 = [1, 2, 4, 3]  但 (li2 is li) 会返回False
 
 # 用del删除任何一个元素
 del li[2]   # li is now [1, 2, 3]
 
+# 删除首次出现的值
+li.remove(2)  # li 现在是 [1, 3]
+li.remove(2)  # 如果2不是列表中的值，会产生异常 ValueError 
+
+# 在特定的索引插入一个元素
+li.insert(1, 2)  # li is now [1, 2, 3] again
+
+# 返回首次和参数匹配的元素的索引 
+li.index(2)  # => 1
+li.index(4)  # 如果4不是元素列表中的值，会产生异常ValueError
+
 # 列表可以相加
 # 注意：li和other_li的值都不变
-li + other_li   # => [1, 2, 3, 4, 5, 6]
+li + other_li  # => [1, 2, 3, 4, 5, 6]
 
-# 用extend拼接列表
+# 用extend()拼接列表
 li.extend(other_li)   # li现在是[1, 2, 3, 4, 5, 6]
 
 # 用in测试列表是否包含值
-1 in li   # => True
+1 in li  # => True
 
 # 用len取列表长度
-len(li)   # => 6
+len(li)  # => 6
 
 
 # 元组是不可改变的序列
@@ -231,14 +258,22 @@ tup = (1, 2, 3)
 tup[0]   # => 1
 tup[0] = 3  # 抛出TypeError
 
-# 列表允许的操作元组大都可以
-len(tup)   # => 3
-tup + (4, 5, 6)   # => (1, 2, 3, 4, 5, 6)
-tup[:2]   # => (1, 2)
-2 in tup   # => True
+# 注意 长度为1的元组必须要结尾有一个逗号，其他长度的
+#　元组包括长度为０的元组，不用结尾加逗号
+type((1))   # => <class 'int'>
+type((1,))  # => <class 'tuple'>
+type(())    # => <class 'tuple'>
 
-# 可以把元组合列表解包，赋值给变量
+# 列表的操作，元组大部分也可以
+len(tup)         # => 3
+tup + (4, 5, 6)  # => (1, 2, 3, 4, 5, 6)
+tup[:2]          # => (1, 2)
+2 in tup         # => True
+
+# 可以把元组(或列表)解包，赋值给变量
 a, b, c = (1, 2, 3)     # 现在a是1，b是2，c是3
+# 也可以进行扩展解包 
+a, *b, c = (1, 2, 3, 4)  # a 是 1, b 是 [2, 3] 还有 c 是 4
 # 元组周围的括号是可以省略的
 d, e, f = 4, 5, 6
 # 交换两个变量的值就这么简单
@@ -250,16 +285,22 @@ empty_dict = {}
 # 初始化的字典
 filled_dict = {"one": 1, "two": 2, "three": 3}
 
+# 字典的键必须是不可变类型. 这可以保证 
+# 键可以转换成哈希常量值，用于快速查询。
+# 不可变类型包括 ints, floats, strings, tuples.
+invalid_dict = {[1,2,3]: "123"}  # => 抛出TypeError: unhashable type: 'list'
+valid_dict = {(1,2,3):[1,2,3]}   # 尽管如此,字典的值可以是任意类型。
+
 # 用[]取值
-filled_dict["one"]   # => 1
+filled_dict["one"]  # => 1
 
-
-# 用keys获得所有的键。因为keys返回一个可迭代对象，所以在这里把结果包在list里。我们下面会详细介绍可迭代。
+# 用keys获得所有的键。因为keys返回一个可迭代对象，所以在这里把结果包在list里。
+# 我们下面会详细介绍可迭代。
 # 注意：字典键的顺序是不定的，你得到的结果可能和以下不同。
-list(filled_dict.keys())   # => ["three", "two", "one"]
+list(filled_dict.keys())  # => ["three", "two", "one"]
 
-
-# 用values获得所有的值。跟keys一样，要用list包起来，顺序也可能不同。
+# 用values获得所有的值。
+# 跟keys一样，要用list包起来，顺序也可能不同。
 list(filled_dict.values())   # => [3, 2, 1]
 
 
